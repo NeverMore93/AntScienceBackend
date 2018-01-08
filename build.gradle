@@ -1,0 +1,42 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.9.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+group = 'com.as.backend'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+    mavenLocal()
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	def springBootVersion = '1.5.7.RELEASE'
+
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.41'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "$springBootVersion"
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "$springBootVersion"
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: "$springBootVersion"
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "$springBootVersion"
+	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.8.RELEASE'
+	compileOnly ('org.projectlombok:lombok:1.16.16')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
