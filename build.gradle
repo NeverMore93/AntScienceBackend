@@ -29,7 +29,7 @@ configurations {
 }
 
 dependencies {
-	def springBootVersion = '1.5.7.RELEASE'
+	def springBootVersion = '1.5.9.RELEASE'
 
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.41'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "$springBootVersion"
