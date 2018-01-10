@@ -21,9 +21,17 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    timeout: 300
+    pool:
+      max-active: 10
+      max-idle: 10
+      max-wait: -1
 logging:
   level:
     org:
       hibernate:
         SQL: debug
-

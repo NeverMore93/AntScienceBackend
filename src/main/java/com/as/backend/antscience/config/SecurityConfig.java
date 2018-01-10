@@ -1,0 +1,97 @@
+package com.as.backend.antscience.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
+import org.springframework.security.core.token.SecureRandomFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.security.SecureRandom;
+
+import javax.annotation.Resource;
+
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j(topic = "SecurityConfig")
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Resource
+    private DataSource dataSource;
+
+    @Resource
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder){
+        authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public KeyBasedPersistenceTokenService keyBasedPersistenceTokenService() throws Exception {
+        KeyBasedPersistenceTokenService keyBasedPersistenceTokenService = new KeyBasedPersistenceTokenService();
+        keyBasedPersistenceTokenService.setServerInteger(123456);
+        keyBasedPersistenceTokenService.setServerSecret("23456");
+        SecureRandomFactoryBean secureRandomFactoryBean = new SecureRandomFactoryBean();
+        SecureRandom secureRandom = secureRandomFactoryBean.getObject();
+        keyBasedPersistenceTokenService.setSecureRandom(secureRandom);
+        return keyBasedPersistenceTokenService;
+    }
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        // 由于使用的是JWT，我们这里不需要csrf
+        httpSecurity.csrf().disable();
+        // 基于token，所以不需要session
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/auth/**").authenticated() .anyRequest().permitAll();
+        // 禁用缓存
+        httpSecurity.headers().cacheControl();
+        httpSecurity.addFilterBefore(basicAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean(name = "jdbcUserDetailsManager")
+    public JdbcUserDetailsManager jdbcUserDetailsManager() {
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
+        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager);
+        jdbcUserDetailsManager.setDataSource(dataSource);
+        return jdbcUserDetailsManager;
+    }
+
+    @Bean(name = "daoAuthenticationProvider")
+    DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(jdbcUserDetailsManager());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
+
+    @Bean
+    BasicAuthenticationFilter basicAuthenticationFilter() {
+        return new BasicAuthenticationFilter(authenticationManager);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(jdbcUserDetailsManager());
+    }
+}
