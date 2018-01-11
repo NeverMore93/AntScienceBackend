@@ -18,8 +18,7 @@ import org.hibernate.annotations.CascadeType;
 @Entity(name = "users")
 @ToString
 @Table(name = "users")
-@Embeddable
-public class User implements UserDetails, CredentialsContainer {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",unique=true)
@@ -35,10 +34,9 @@ public class User implements UserDetails, CredentialsContainer {
     private String email;
     @Column(name = "gender")
     private Gender gender;
-//    @JoinTable(name = "users_authorities",joinColumns = @JoinColumn( name="users_id"),inverseJoinColumns = {@JoinColumn(name = "authorities_authority",referencedColumnName ="authority"),@JoinColumn(name ="authorities_username",referencedColumnName ="username")})
-    @OneToMany
+    @OneToMany(mappedBy = "users")
+    @JoinColumn(name = "authorities_authority")
     @Cascade({CascadeType.ALL })
-    @JoinTable(name = "users_authorities")
     private Set<SimpleGrantedAuthority> authorities;
     @Column(name = "accountNonExpired")
     private boolean accountNonExpired;
@@ -48,8 +46,4 @@ public class User implements UserDetails, CredentialsContainer {
     private boolean credentialsNonExpired;
     @Column(name = "enabled")
     private boolean enabled;
-    @Override
-    public void eraseCredentials() {
-        password = null;
-    }
 }

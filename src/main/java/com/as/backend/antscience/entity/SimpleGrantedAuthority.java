@@ -7,12 +7,9 @@ import javax.persistence.*;
 
 @Data
 @Entity(name = "authorities")
-@Embeddable
-@Table(name = "authorities", uniqueConstraints={@UniqueConstraint(columnNames={"authority","username"})})
+@Table(name = "authorities")
 class SimpleGrantedAuthority implements GrantedAuthority {
-    private Long id;
-    @Column(name = "authority")
+    @Column(name = "authority",unique=true)
+    @Id
     private String authority;
-    @Column(name = "username")
-    private String username;
 }
