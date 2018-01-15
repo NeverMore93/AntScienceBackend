@@ -1,5 +1,6 @@
 package com.as.backend.antscience.config;
 
+import com.as.backend.antscience.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,9 +19,11 @@ import org.springframework.security.core.token.SecureRandomFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.security.SecureRandom;
 
@@ -35,12 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Resource
-    private AuthenticationManager authenticationManager;
+    private UserService userService;
 
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder){
-        authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider());
-    }
+    @Resource
+    private AuthenticationManager authenticationManager;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,24 +64,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 由于使用的是JWT，我们这里不需要csrf
         httpSecurity.csrf().disable();
         // 基于token，所以不需要session
-        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests().antMatchers("/auth/**").authenticated() .anyRequest().permitAll();
+        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 禁用缓存
+        httpSecurity.authorizeRequests().antMatchers("/auth/**").authenticated() .anyRequest().permitAll();
         httpSecurity.headers().cacheControl();
         httpSecurity.addFilterBefore(basicAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Bean(name = "jdbcUserDetailsManager")
-    public JdbcUserDetailsManager jdbcUserDetailsManager() {
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager();
-        jdbcUserDetailsManager.setAuthenticationManager(authenticationManager);
-        jdbcUserDetailsManager.setDataSource(dataSource);
-        return jdbcUserDetailsManager;
     }
 
     @Bean(name = "daoAuthenticationProvider")
     DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(jdbcUserDetailsManager());
+        daoAuthenticationProvider.setUserDetailsService(userService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
@@ -92,6 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(jdbcUserDetailsManager());
+        auth.userDetailsService(userService);
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
+
+    @Bean
+    public AuthenticationEntryPoint unauthorizedEntryPoint() {
+        return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
