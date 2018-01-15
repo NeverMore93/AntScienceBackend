@@ -40,4 +40,10 @@ public class ArticleController {
         return articleDto;
     }
 
+    @PostMapping("/getArticle/{ArticleId}")
+    public  ArticleDto getArticle(){
+
+        return null;
+    }
+
 }

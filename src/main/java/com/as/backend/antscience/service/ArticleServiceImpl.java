@@ -46,6 +46,12 @@ public class ArticleServiceImpl implements ArticleService{
         return articleDtos;
     }
 
+    @Override
+    public ArticleDto getArticleById(Long userId, Long articleId) {
+        File file = new File("/media/Acticles/"+userId+"/"+articleId+".txt");
+        return null;
+    }
+
     private ArticleDto Article2ArticleDto(Article article,ArticleDto articleDto){
         if(Objects.isNull(articleDto)){
             articleDto = new ArticleDto();
