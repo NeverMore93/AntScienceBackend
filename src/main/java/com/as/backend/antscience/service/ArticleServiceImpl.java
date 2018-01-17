@@ -4,8 +4,8 @@ import com.as.backend.antscience.dao.ArticleDao;
 import com.as.backend.antscience.dao.UserDao;
 import com.as.backend.antscience.dto.ArticleDto;
 import com.as.backend.antscience.entity.Article;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service("articleServiceImpl")
 public class ArticleServiceImpl implements ArticleService{
     @Resource
@@ -73,13 +74,14 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     private boolean saveArticle(String[] content,Long userId,Long articleId){
+    private void saveArticle(String[] content,Long userId,Long articleId){
         File file = new File("/media/Acticles/"+userId+"/"+articleId+".txt");
         for(String str:content){
             try {
-                FileUtils.writeStringToFile(file,str+"\n","UTF-8",true);
+                FileUtils.writeStringToFile(file,str+"\n","UTF-8",false);
             } catch (IOException e) {
+                log.info("存储文件"+userId+":"+articleId+"失败,存储路径:"+file.getPath());
                 e.printStackTrace();
-                return false;
             }
         }
         return true;
