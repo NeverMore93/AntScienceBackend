@@ -12,4 +12,5 @@ import java.util.List;
 public interface ArticleDao extends JpaRepository<Article,Long> {
     Article saveAndFlush(Article article);
     List<Article> findAll();
+    Article findArticleById(Long Id);
 }

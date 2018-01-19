@@ -42,7 +42,7 @@ public class ArticleController {
 
     @PostMapping("/getArticle/{ArticleId}")
     public  ArticleDto getArticle(){
-
+        articleService.getArticleById()
         return null;
     }
 
