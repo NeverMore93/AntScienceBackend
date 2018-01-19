@@ -7,5 +7,5 @@ import java.util.List;
 public interface ArticleService {
     ArticleDto createArticle(ArticleDto articleDto);
     List<ArticleDto> getAllArticles();
-    ArticleDto getArticleById(Long userId,Long articleId);
+    ArticleDto getArticleById(Long articleId);
 }

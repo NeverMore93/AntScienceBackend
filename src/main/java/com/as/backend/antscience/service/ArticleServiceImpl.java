@@ -50,10 +50,10 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public ArticleDto getArticleById(Long userId, Long articleId) {
-        File file = new File("/media/Acticles/"+userId+"/"+articleId+".txt");
+    public ArticleDto getArticleById(Long articleId) {
         String[] content = null;
         Article article = articleDao.findArticleById(articleId);
+        File file = new File("/media/Acticles/"+article.getAuthorID()+"/"+articleId+".txt");
         ArticleDto articleDto = Article2ArticleDto(article,null);
         try {
             List<String> strs= Files.readLines(file, StandardCharsets.UTF_8);

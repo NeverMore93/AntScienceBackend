@@ -4,6 +4,7 @@ import com.as.backend.antscience.dto.ArticleDto;
 import com.as.backend.antscience.entity.Article;
 import com.as.backend.antscience.service.ArticleService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,8 +42,8 @@ public class ArticleController {
     }
 
     @PostMapping("/getArticle/{ArticleId}")
-    public  ArticleDto getArticle(){
-        articleService.getArticleById()
+    public  ArticleDto getArticle(@PathVariable Long ArticleId){
+        articleService.getArticleById(ArticleId);
         return null;
     }
 
