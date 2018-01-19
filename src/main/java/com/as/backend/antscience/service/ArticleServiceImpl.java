@@ -73,7 +73,6 @@ public class ArticleServiceImpl implements ArticleService{
         return article;
     }
 
-    private boolean saveArticle(String[] content,Long userId,Long articleId){
     private void saveArticle(String[] content,Long userId,Long articleId){
         File file = new File("/media/Acticles/"+userId+"/"+articleId+".txt");
         for(String str:content){
@@ -84,7 +83,6 @@ public class ArticleServiceImpl implements ArticleService{
                 e.printStackTrace();
             }
         }
-        return true;
     }
 
     private String[] getArticleContent(Long id){

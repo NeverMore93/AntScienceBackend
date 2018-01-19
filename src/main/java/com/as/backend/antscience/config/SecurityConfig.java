@@ -61,11 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // 由于使用的是JWT，我们这里不需要csrf
         httpSecurity.csrf().disable();
-        // 基于token，所以不需要session
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        // 禁用缓存
         httpSecurity.authorizeRequests().antMatchers("/auth/**").authenticated() .anyRequest().permitAll();
         httpSecurity.headers().cacheControl();
         httpSecurity.addFilterBefore(basicAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -81,17 +78,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     BasicAuthenticationFilter basicAuthenticationFilter() {
-        return new BasicAuthenticationFilter(authenticationManager);
+        return new BasicAuthenticationFilter(authenticationManager,unauthorizedEntryPoint());
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
-        auth.authenticationProvider(daoAuthenticationProvider());
-    }
-
-    @Bean
+    @Bean(name = "unauthorizedEntryPoint")
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
 }
