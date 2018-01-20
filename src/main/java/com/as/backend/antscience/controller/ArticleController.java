@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,9 @@ public class ArticleController {
     @PostMapping("/demoArticle")
     public ArticleDto demoArticle(){
         String[] label = {"adasd"};
-        String[] content = {"qwe","asd"};
+        List<String> content = new ArrayList<>();
+        content.add("qwe");
+        content.add("asd");
         ArticleDto articleDto = new ArticleDto();
         articleDto.setAuthorName("yuan");
         articleDto.setLabel(label);
@@ -43,8 +46,7 @@ public class ArticleController {
 
     @PostMapping("/getArticle/{ArticleId}")
     public  ArticleDto getArticle(@PathVariable Long ArticleId){
-        articleService.getArticleById(ArticleId);
-        return null;
+        return articleService.getArticleById(ArticleId);
     }
 
 }

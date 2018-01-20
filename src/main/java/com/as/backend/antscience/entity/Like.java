@@ -11,30 +11,22 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "articles")
+@Entity(name = "likes")
 @ToString
-@Table(name = "articles")
-public class Article {
+@Table(name = "likes")
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",unique=true)
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "articleId")
+    private Long articleId;
 
-    @Column(name = "authorID")
-    private Long authorID;
+    @Column(name = "userId")
+    private Long userId;
 
-    @Column(name = "label")
-    private String[] label;
-
-    @Column(name = "status")
-    private String status;
-
-    @Column(name = "creationTime")
+    @Column(name = "createTime")
     private Date createTime;
 
-    @Column(name = "likes")
-    private Integer likes;
 }

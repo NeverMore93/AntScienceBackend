@@ -19,4 +19,6 @@ public interface UserDao extends JpaRepository<User,Long> {
 
     @Query(value = "SELECT username FROM users WHERE id = ?1", nativeQuery = true)
     String getUsernameByUserId(Long id);
+
+    User findUsersByUsernameOrEmail(String username,String email);
 }

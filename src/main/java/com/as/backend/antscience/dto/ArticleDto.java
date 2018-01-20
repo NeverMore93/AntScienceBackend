@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +15,6 @@ public class ArticleDto {
     private String title;
     private String authorName;
     private String[] label;
-    private String[] content;
-    private Timestamp createTime;
+    private List<String> content;
+    private Date createTime;
 }
