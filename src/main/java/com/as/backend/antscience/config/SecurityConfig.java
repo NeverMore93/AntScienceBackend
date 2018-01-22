@@ -1,5 +1,6 @@
 package com.as.backend.antscience.config;
 
+import com.as.backend.antscience.filter.DefaultUsernamePasswordAuthenticationFilter;
 import com.as.backend.antscience.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -65,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeRequests().antMatchers("/auth/**").authenticated() .anyRequest().permitAll();
         httpSecurity.headers().cacheControl();
-        httpSecurity.addFilterBefore(basicAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(basicAuthenticationFilter(), DefaultUsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean(name = "daoAuthenticationProvider")

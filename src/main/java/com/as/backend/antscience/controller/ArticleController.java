@@ -4,10 +4,7 @@ import com.as.backend.antscience.dto.ArticleDto;
 import com.as.backend.antscience.entity.Article;
 import com.as.backend.antscience.service.ArticleService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -15,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
 public class ArticleController {
     @Resource
     private ArticleService articleService;
