@@ -26,8 +26,6 @@ public class ArticleServiceImpl implements ArticleService{
     @Resource
     private ArticleDao articleDao;
 
-    @Resource
-    private UserService userService;
 
     @Override
     public ArticleDto createArticle(ArticleDto articleDto) {
@@ -43,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService{
         List<Article> articles = articleDao.findAll();
         List<ArticleDto> articleDtos = new ArrayList<>();
         for (Article article :  articles) {
-            articleDtos.add(Article2ArticleDto(article,null));
+            articleDtos.add(getArticleById(article.getId()));
         }
 
         return articleDtos;
@@ -87,7 +85,7 @@ public class ArticleServiceImpl implements ArticleService{
         File file = new File("/media/Acticles/"+userId+"/"+articleId+".txt");
         for(String str:content){
             try {
-                FileUtils.writeStringToFile(file,str+"\n","UTF-8",false);
+                FileUtils.writeStringToFile(file,str+"\n","UTF-8",true);
             } catch (IOException e) {
                 log.info("存储文件"+userId+":"+articleId+"失败,存储路径:"+file.getPath());
                 e.printStackTrace();

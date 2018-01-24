@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeRequests().antMatchers("/auth/**").authenticated() .anyRequest().permitAll();
         httpSecurity.headers().cacheControl();
-        httpSecurity.addFilterBefore(basicAuthenticationFilter(), DefaultUsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(basicAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean(name = "daoAuthenticationProvider")

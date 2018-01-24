@@ -18,8 +18,8 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping("/allArticle")
-    public List<Article> getAllArticle(){
-        return null;
+    public List<ArticleDto> getAllArticle(){
+        return articleService.getAllArticles();
     }
 
     @PostMapping("/createArticle")
@@ -30,7 +30,7 @@ public class ArticleController {
 
     @PostMapping("/demoArticle")
     public ArticleDto demoArticle(){
-        String[] label = {"adasd"};
+        String[] label = {"demo"};
         List<String> content = new ArrayList<>();
         content.add("qwe");
         content.add("asd");
