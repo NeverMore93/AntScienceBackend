@@ -47,4 +47,9 @@ public class ArticleController {
         return articleService.getArticleById(ArticleId);
     }
 
+    @DeleteMapping("/delete/{ArticleId}")
+    public void deleteArticle(@PathVariable Long ArticleId){
+        articleService.deleteArticleById(ArticleId);
+    }
+
 }
