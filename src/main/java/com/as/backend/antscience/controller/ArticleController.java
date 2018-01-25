@@ -18,8 +18,8 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping("/allArticle")
-    public List<ArticleDto> getAllArticle(){
-        return articleService.getAllArticles();
+    public List<Article> getAllArticle(){
+        return null;
     }
 
     @PostMapping("/createArticle")
@@ -30,7 +30,7 @@ public class ArticleController {
 
     @PostMapping("/demoArticle")
     public ArticleDto demoArticle(){
-        String[] label = {"demo"};
+        String[] label = {"adasd"};
         List<String> content = new ArrayList<>();
         content.add("qwe");
         content.add("asd");
@@ -45,11 +45,6 @@ public class ArticleController {
     @PostMapping("/getArticle/{ArticleId}")
     public  ArticleDto getArticle(@PathVariable Long ArticleId){
         return articleService.getArticleById(ArticleId);
-    }
-
-    @DeleteMapping("/delete/{ArticleId}")
-    public void deleteArticle(@PathVariable Long ArticleId){
-        articleService.deleteArticleById(ArticleId);
     }
 
 }

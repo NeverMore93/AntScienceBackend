@@ -13,5 +13,4 @@ public interface ArticleDao extends JpaRepository<Article,Long> {
     Article saveAndFlush(Article article);
     List<Article> findAll();
     Article findArticleById(Long Id);
-    void delete(Long aLong);
 }

@@ -26,6 +26,8 @@ public class ArticleServiceImpl implements ArticleService{
     @Resource
     private ArticleDao articleDao;
 
+    @Resource
+    private UserService userService;
 
     @Override
     public ArticleDto createArticle(ArticleDto articleDto) {
@@ -41,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService{
         List<Article> articles = articleDao.findAll();
         List<ArticleDto> articleDtos = new ArrayList<>();
         for (Article article :  articles) {
-            articleDtos.add(getArticleById(article.getId()));
+            articleDtos.add(Article2ArticleDto(article,null));
         }
 
         return articleDtos;
@@ -51,7 +53,6 @@ public class ArticleServiceImpl implements ArticleService{
     public ArticleDto getArticleById(Long articleId) {
         Article article = articleDao.findArticleById(articleId);
         File file = new File("/media/Acticles/"+article.getAuthorID()+"/"+articleId+".txt");
-//        File file = new File("C:\\Users\\YUAN\\Documents\\Acticles\\"+article.getAuthorID()+"\\"+articleId+".txt");
         ArticleDto articleDto = Article2ArticleDto(article,null);
         try {
             List<String> strs= Files.readLines(file, StandardCharsets.UTF_8);
@@ -61,12 +62,6 @@ public class ArticleServiceImpl implements ArticleService{
         }
         return articleDto;
     }
-
-    @Override
-    public void deleteArticleById(Long articleId) {
-        articleDao.delete(articleId);
-    }
-
 
     private ArticleDto Article2ArticleDto(Article article,ArticleDto articleDto){
         if(Objects.isNull(articleDto)){
@@ -90,10 +85,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     private void saveArticle(List<String> content,Long userId,Long articleId){
         File file = new File("/media/Acticles/"+userId+"/"+articleId+".txt");
-//        File file = new File("C:\\Users\\YUAN\\Documents\\Acticles\\"+userId+"\\"+articleId+".txt");
         for(String str:content){
             try {
-                FileUtils.writeStringToFile(file,str+"\n","UTF-8",true);
+                FileUtils.writeStringToFile(file,str+"\n","UTF-8",false);
             } catch (IOException e) {
                 log.info("存储文件"+userId+":"+articleId+"失败,存储路径:"+file.getPath());
                 e.printStackTrace();
