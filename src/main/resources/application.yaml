@@ -35,3 +35,6 @@ logging:
     org:
       hibernate:
         SQL: debug
+security:
+  basic:
+    enabled: false
