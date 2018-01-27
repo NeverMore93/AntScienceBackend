@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
-public class ArticleController extends BaseController {
+@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
+public class ArticleController {
     @Resource
     private ArticleService articleService;
 
@@ -30,12 +30,12 @@ public class ArticleController extends BaseController {
     public ArticleDto demoArticle(){
         String[] label = {"demo"};
         List<String> content = new ArrayList<>();
-        content.add("qwe");
-        content.add("asd");
+        content.add("demo1");
+        content.add("demo2");
         ArticleDto articleDto = new ArticleDto();
         articleDto.setAuthorName("yuan");
         articleDto.setLabel(label);
-        articleDto.setTitle("test");
+        articleDto.setTitle("Test");
         articleDto.setContent(content);
         return articleDto;
     }

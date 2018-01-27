@@ -4,6 +4,7 @@ import com.as.backend.antscience.dto.LoginUser;
 import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.enums.Authority;
 import com.as.backend.antscience.service.UserService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +13,8 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
-public class AccountController {
+@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
+public class AccountController{
 
     @Resource(name = "userService")
     private UserService userService;
