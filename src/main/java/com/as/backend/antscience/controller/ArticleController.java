@@ -1,9 +1,7 @@
 package com.as.backend.antscience.controller;
 
 import com.as.backend.antscience.dto.ArticleDto;
-import com.as.backend.antscience.entity.Article;
 import com.as.backend.antscience.service.ArticleService;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -12,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
-public class ArticleController {
+//@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
+public class ArticleController extends BaseController {
     @Resource
     private ArticleService articleService;
 
