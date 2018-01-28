@@ -30,7 +30,7 @@ public class AccountController{
 
 
     @GetMapping("/verification/phone/{phone}")
-    public User register(@RequestBody @Valid LoginUser loginUser){
+    public User sendVerificationCodeByPhone(@RequestBody @Valid LoginUser loginUser){
         User user  = new User();
         user.setUsername(loginUser.getIdentity());
         user.setPassword(loginUser.getPassword());

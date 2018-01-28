@@ -9,9 +9,16 @@ import java.util.List;
 
 @Repository
 @Component
-public interface ArticleDao extends JpaRepository<Article,Long> {
+public interface ArticleDao extends JpaRepository<Article, Long> {
+
+    @Override
     Article saveAndFlush(Article article);
+
+    @Override
     List<Article> findAll();
+
     Article findArticleById(Long Id);
+
+    @Override
     void delete(Long aLong);
 }
