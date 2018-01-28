@@ -16,6 +16,7 @@ public class SMSConfig {
         smsHttpRequest.setAppid("18631");
         smsHttpRequest.setProject("hIdfR3");
         smsHttpRequest.setSignature("17d0979bebbe51d711119d08271d4880");
+        smsHttpRequest.setURL("https://api.mysubmail.com/message/xsend.json");
         return smsHttpRequest;
     }
 }

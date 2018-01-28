@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 
 @Data
@@ -32,6 +33,11 @@ public class User {
     @Email
     @Column(name = "email")
     private String email;
+
+
+    @Column(name = "phone")
+    @Pattern(regexp = "^1\\d{10}$")
+    private String phone;
 
     @Column(name = "gender")
     private Gender gender;
