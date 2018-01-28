@@ -8,10 +8,8 @@ import org.asynchttpclient.*;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Data
 @NoArgsConstructor
@@ -26,9 +24,9 @@ public class SMSHttpRequest {
     @Resource(name = "redisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
-    public void excute() {
+    public void execute() {
         String code = RandomCode.generateCode(4);
-        redisTemplate.opsForValue().set(to,code);
+        redisTemplate.opsForValue().set(to, code);
         AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
         List<Param> params = new ArrayList<>();
         params.add(new Param("appid", appid));
@@ -40,16 +38,18 @@ public class SMSHttpRequest {
 
         ListenableFuture<String> response = asyncHttpClient.executeRequest(request, new AsyncCompletionHandler<String>() {
             @Override
-            public String onCompleted(Response response){
-                log.info(to+"短信发送成功");
+            public String onCompleted(Response response) {
+                log.info(to + "短信发送成功");
                 return response.getResponseBody();
             }
+
             @Override
             public void onThrowable(Throwable t) {
-                log.info(to+"短信发送失败",t);
-                throw new SMSException(to+"短信发送失败",t);
+                log.info(to + "短信发送失败", t);
+                throw new SMSException(to + "短信发送失败", t);
             }
         });
 
-        
-    }}
+
+    }
+}
