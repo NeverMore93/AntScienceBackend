@@ -1,9 +1,11 @@
 package com.as.backend.antscience.controller;
 
 import com.as.backend.antscience.dto.LoginUser;
+import com.as.backend.antscience.dto.SMSdto;
 import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.enums.Authority;
 import com.as.backend.antscience.service.UserService;
+import com.as.backend.antscience.utils.SMSHttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -15,6 +17,9 @@ public class AccountController{
 
     @Resource(name = "userService")
     private UserService userService;
+
+    @Resource(name = "smsHttpRequest")
+    private SMSHttpRequest smsHttpRequest;
 
     String[] authorities = {Authority.GENERAL.toString()};
 
@@ -30,13 +35,9 @@ public class AccountController{
 
 
     @GetMapping("/verification/phone/{phone}")
-    public User sendVerificationCodeByPhone(@RequestBody @Valid LoginUser loginUser){
-        User user  = new User();
-        user.setUsername(loginUser.getIdentity());
-        user.setPassword(loginUser.getPassword());
-        user.setRoles(authorities);
-        userService.createUser(user);
-        return userService.findUserByUsername(loginUser.getIdentity());
+    public SMSdto sendVerificationCodeByPhone(@RequestParam String phone){
+        smsHttpRequest.setTo(phone);
+        return smsHttpRequest.execute();
     }
 
 
