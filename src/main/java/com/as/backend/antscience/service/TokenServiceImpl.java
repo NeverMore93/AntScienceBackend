@@ -12,12 +12,12 @@ import java.util.Date;
 @Service(value ="tokenService" )
 public class TokenServiceImpl implements TokenService {
     private static final String SIGNING_KEY = "secret";
-    private static final Integer FIFTEEN_MINUTES = 15 * 60;
-
-    private DateService dateService = new DateService();
+    private static final Integer FIFTEEN_MINUTES = 15 * 60*1000;
 
     public String buildToken(String userName){
-        Date expirationTime = dateService.addSecond(new Date(), FIFTEEN_MINUTES);
+        Date currentTime = new Date();
+        long t= currentTime.getTime();
+        Date expirationTime = new Date(t+FIFTEEN_MINUTES);
         Claims claims = Jwts.claims().setSubject(userName).setExpiration(expirationTime);
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, SIGNING_KEY).compact();
     }
