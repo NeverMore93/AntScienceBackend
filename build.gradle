@@ -49,10 +49,6 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "$jacksonVersion"
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "$jacksonVersion"
 
-
-
-
-
 	compileOnly ('org.projectlombok:lombok:1.16.16')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

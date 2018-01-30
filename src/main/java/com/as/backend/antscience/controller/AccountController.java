@@ -2,6 +2,7 @@ package com.as.backend.antscience.controller;
 
 import com.as.backend.antscience.dto.LoginUser;
 import com.as.backend.antscience.dto.SMSdto;
+import com.as.backend.antscience.dto.UserDto;
 import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.enums.Authority;
 import com.as.backend.antscience.service.UserService;
@@ -42,10 +43,10 @@ public class AccountController{
 
 
 
-//    @PostMapping("/login")
-//    public User login(@RequestBody @Valid LoginUser user){
-//
-//        return null;
-//    }
+    @PostMapping("/login")
+    public UserDto login(@RequestBody @Valid LoginUser user){
+
+        return null;
+    }
 
 }
