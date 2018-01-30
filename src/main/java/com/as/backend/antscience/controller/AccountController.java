@@ -4,7 +4,6 @@ import com.as.backend.antscience.dto.LoginUser;
 import com.as.backend.antscience.dto.SMSdto;
 import com.as.backend.antscience.dto.UserDto;
 import com.as.backend.antscience.entity.User;
-import com.as.backend.antscience.enums.Authority;
 import com.as.backend.antscience.service.UserService;
 import com.as.backend.antscience.utils.SMSHttpRequest;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,8 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
-public class AccountController{
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class AccountController {
 
     @Resource(name = "userService")
     private UserService userService;
@@ -22,31 +21,23 @@ public class AccountController{
     @Resource(name = "smsHttpRequest")
     private SMSHttpRequest smsHttpRequest;
 
-    String[] authorities = {Authority.GENERAL.toString()};
-
-    @PostMapping("/register")
-    public User register(@RequestBody @Valid LoginUser loginUser){
-        User user  = new User();
-        user.setUsername(loginUser.getIdentity());
-        user.setPassword(loginUser.getPassword());
-        user.setRoles(authorities);
-        userService.createUser(user);
-        return userService.findUserByUsername(loginUser.getIdentity());
+    @PostMapping("/auth/register")
+    public User register(@RequestBody @Valid LoginUser loginUser) {
+        return userService.register(loginUser);
     }
 
-
-    @GetMapping("/verification/phone/{phone}")
-    public SMSdto sendVerificationCodeByPhone(@RequestParam String phone){
-        smsHttpRequest.setTo(phone);
-        return smsHttpRequest.execute();
+    @PostMapping("/auth/login")
+    public UserDto login(@RequestBody @Valid LoginUser loginUser) {
+        return userService.login(loginUser);
     }
 
-
-
-    @PostMapping("/login")
-    public UserDto login(@RequestBody @Valid LoginUser user){
-
-        return null;
+    @GetMapping("/auth/verification/phone/{phone}")
+    public SMSdto sendVerificationCodeByPhone(@PathVariable("phone") String phone) {
+        return smsHttpRequest.execute(phone);
     }
 
+    @GetMapping("/auth/verification")
+    public SMSdto validateVerificationCode(@RequestParam("to") String to, @RequestParam("code") String code) {
+        return smsHttpRequest.validateVerificationCode(to, code);
+    }
 }

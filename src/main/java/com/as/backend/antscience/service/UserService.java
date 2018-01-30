@@ -10,4 +10,6 @@ public interface UserService {
     void createUser(User user);
     User findUserByIdentity(String identity);
     UserDto login(LoginUser loginUser);
+
+    User register(LoginUser loginUser);
 }
