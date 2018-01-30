@@ -8,8 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Component
-public interface UserDao extends JpaRepository<User,Long> {
+public interface UserDao extends JpaRepository<User, Long> {
     User saveAndFlush(User user);
+
     User findUserByUsername(String username);
 
     @Query(value = "SELECT id FROM users WHERE username = ?1", nativeQuery = true)
@@ -18,5 +19,5 @@ public interface UserDao extends JpaRepository<User,Long> {
     @Query(value = "SELECT username FROM users WHERE id = ?1", nativeQuery = true)
     String getUsernameByUserId(Long id);
 
-    User findUsersByUsernameOrEmailOrPhone(String username,String email,String phone);
+    User findUsersByUsernameOrEmailOrPhone(String username, String email, String phone);
 }
