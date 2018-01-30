@@ -29,6 +29,7 @@ public class AuthorityFilter extends HttpServlet implements Filter {
     @Override
     public void doFilter(ServletRequest sRequest, ServletResponse sResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) sRequest;
+        log.info(sRequest.toString());
         String token = request.getHeader("token");
         String userName = request.getHeader("userName");
         log.info("token: " + token);
