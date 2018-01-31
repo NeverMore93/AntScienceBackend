@@ -37,7 +37,7 @@ public class AccountController {
         return smsHttpRequest.execute(phone);
     }
 
-    @GetMapping("/auth/verification/{to}/{code}")
+    @GetMapping("/auth/verification/phone/{to}/code/{code}")
     public UserDto validateVerificationCode(@PathVariable("to") String to, @PathVariable("code") String code) {
         return smsHttpRequest.validateVerificationCode(to, code);
     }

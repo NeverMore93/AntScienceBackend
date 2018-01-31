@@ -6,6 +6,7 @@ import com.as.backend.antscience.dto.RegisterUserDto;
 import com.as.backend.antscience.dto.UserDto;
 import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.enums.Authority;
+import com.as.backend.antscience.enums.Gender;
 import com.as.backend.antscience.exceptions.UserExistedException;
 import com.as.backend.antscience.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
@@ -54,9 +55,13 @@ public class UserServiceImpl implements UserService {
         if (Objects.nonNull(foundUser)){
             throw new UserExistedException("用户名、手机号或邮箱已被使用或注册");
         }
+        Gender gender = registerUserDto.getGender();
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setGender(gender);
         user.setRoles(authorities);
         userDao.saveAndFlush(user);
         user = userDao.saveAndFlush(user);;
