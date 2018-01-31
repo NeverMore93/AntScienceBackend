@@ -24,17 +24,15 @@ public class AuthorityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest sRequest, HttpServletResponse sResponse, FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest request = (HttpServletRequest) sRequest;
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         ServletContext context = request.getServletContext();
         ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(context);
         tokenService = ctx.getBean(TokenService.class);
-        log.info(sRequest.toString());
+        log.info(request.toString());
         String token = request.getHeader("token");
         String userName = request.getHeader("userName");
         log.info("token: " + token);
         log.info("userName: " + userName);
-        HttpServletResponse response = (HttpServletResponse) sResponse;
         String url = request.getServletPath();
         if (!url.contains(AUTH) && !url.equals("/")) {
             log.info("开始拦截验证， 处理Token");
