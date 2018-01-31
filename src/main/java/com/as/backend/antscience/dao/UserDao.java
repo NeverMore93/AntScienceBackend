@@ -22,4 +22,7 @@ public interface UserDao extends JpaRepository<User, Long> {
     User findUsersByUsernameOrEmailOrPhone(String username, String email, String phone);
 
     User findUserByPhone(String phone);
+
+
+
 }
