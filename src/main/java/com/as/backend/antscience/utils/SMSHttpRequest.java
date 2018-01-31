@@ -1,8 +1,13 @@
 package com.as.backend.antscience.utils;
 
+import com.as.backend.antscience.dao.UserDao;
+import com.as.backend.antscience.dto.RegisterUserDto;
 import com.as.backend.antscience.dto.SMSdto;
+import com.as.backend.antscience.dto.UserDto;
+import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.exceptions.SMSException;
 import com.as.backend.antscience.exceptions.VerificationCodeException;
+import com.as.backend.antscience.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +19,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +36,12 @@ public class SMSHttpRequest {
 
     @Resource(name = "redisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource(name = "userDao")
+    private UserDao userDao;
+
+    @Resource(name = "userService")
+    private UserService userService;
 
     public SMSdto execute(String to) {
         SMSdto smSdto = new SMSdto();
@@ -68,12 +80,18 @@ public class SMSHttpRequest {
         return smSdto;
     }
 
-    public SMSdto validateVerificationCode(String to, String code) {
+    public UserDto validateVerificationCode(String to, String code) {
         String cachedCode = (String) redisTemplate.opsForValue().get(to);
         if (!code.equals(cachedCode)) {
             throw new VerificationCodeException("验证码错误");
         }
-        // TODO: 2018/1/30 需要返回什么
+        User user = userDao.findUserByPhone(to);
+        if(Objects.isNull(user)){
+            RegisterUserDto registerUserDto = new RegisterUserDto();
+            registerUserDto.setPhone(to);
+            registerUserDto.setUsername(to);
+            userService.register(registerUserDto);
+        }
         return null;
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Slf4j
-@Service("articleServiceImpl")
+@Service("articleService")
 public class ArticleServiceImpl implements ArticleService{
     @Resource
     private UserDao userDao;

@@ -2,6 +2,7 @@ package com.as.backend.antscience.service;
 
 import com.as.backend.antscience.dao.UserDao;
 import com.as.backend.antscience.dto.LoginUser;
+import com.as.backend.antscience.dto.RegisterUserDto;
 import com.as.backend.antscience.dto.UserDto;
 import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.enums.Authority;
@@ -44,36 +45,22 @@ public class UserServiceImpl implements UserService {
         return User2UserDto(user);
     }
 
-    @Override
-    public User register(LoginUser loginUser) {
-        String identity = loginUser.getIdentity();
-        User foundUser = userDao.findUsersByUsernameOrEmailOrPhone(identity, identity, identity);
+    public UserDto register(RegisterUserDto registerUserDto) {
+        String phone = registerUserDto.getPhone();
+        String email = registerUserDto.getEmail();
+        String username = registerUserDto.getUsername();
+        String password = registerUserDto.getPassword();
+        User foundUser = userDao.findUsersByUsernameOrEmailOrPhone(username, email, phone);
         if (Objects.nonNull(foundUser)){
-            throw new UserExistedException("用户已经存在");
+            throw new UserExistedException("用户名、手机号或邮箱已被使用或注册");
         }
         User user = new User();
-        user.setUsername(identity);
-        user.setPassword(loginUser.getPassword());
+        user.setUsername(username);
+        user.setPassword(password);
         user.setRoles(authorities);
         userDao.saveAndFlush(user);
-        return userDao.findUserByUsername(loginUser.getIdentity());
-    }
-
-    public void updateUser(User user) {
-    }
-
-
-    public void deleteUser(String username) {
-
-    }
-
-    public void changePassword(String oldPassword, String newPassword) {
-
-    }
-
-
-    public boolean userExists(String username) {
-        return false;
+        user = userDao.saveAndFlush(user);;
+        return User2UserDto(user);
     }
 
 

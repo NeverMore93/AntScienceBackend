@@ -1,6 +1,7 @@
 package com.as.backend.antscience.controller;
 
 import com.as.backend.antscience.dto.LoginUser;
+import com.as.backend.antscience.dto.RegisterUserDto;
 import com.as.backend.antscience.dto.SMSdto;
 import com.as.backend.antscience.dto.UserDto;
 import com.as.backend.antscience.entity.User;
@@ -22,8 +23,8 @@ public class AccountController {
     private SMSHttpRequest smsHttpRequest;
 
     @PostMapping("/auth/register")
-    public User register(@RequestBody @Valid LoginUser loginUser) {
-        return userService.register(loginUser);
+    public UserDto register(@RequestBody @Valid RegisterUserDto registerUserDto) {
+        return userService.register(registerUserDto);
     }
 
     @PostMapping("/auth/login")
@@ -36,8 +37,8 @@ public class AccountController {
         return smsHttpRequest.execute(phone);
     }
 
-    @GetMapping("/auth/verification")
-    public SMSdto validateVerificationCode(@RequestParam("to") String to, @RequestParam("code") String code) {
+    @GetMapping("/auth/verification/{to}/{code}")
+    public UserDto validateVerificationCode(@PathVariable("to") String to, @PathVariable("code") String code) {
         return smsHttpRequest.validateVerificationCode(to, code);
     }
 }
