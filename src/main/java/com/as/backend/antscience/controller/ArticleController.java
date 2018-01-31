@@ -10,20 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8102", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ArticleController {
     @Resource
     private ArticleService articleService;
 
-    @PostMapping("/allArticle")
-    public List<ArticleDto> getAllArticle(){
-        return articleService.getAllArticles();
+    @GetMapping("/auth/articles")
+    public List<ArticleDto> getArticles(){
+        return articleService.getArticles();
     }
 
-    @PostMapping("/createArticle")
-    public ArticleDto createArticle(@RequestBody @Valid ArticleDto articleDto){
-        articleDto = articleService.createArticle(articleDto);
-        return articleDto;
+    @PostMapping("/article")
+    public ArticleDto create(@RequestBody @Valid ArticleDto articleDto){
+        return articleService.create(articleDto);
     }
 
     @PostMapping("/demoArticle")
@@ -40,14 +39,14 @@ public class ArticleController {
         return articleDto;
     }
 
-    @PostMapping("/getArticle/{ArticleId}")
-    public  ArticleDto getArticle(@PathVariable Long ArticleId){
-        return articleService.getArticleById(ArticleId);
+    @GetMapping("/article/id/{id}")
+    public  ArticleDto getById(@PathVariable Long id){
+        return articleService.getById(id);
     }
 
-    @DeleteMapping("/delete/{ArticleId}")
-    public void deleteArticle(@PathVariable Long ArticleId){
-        articleService.deleteArticleById(ArticleId);
+    @DeleteMapping("/article/id/{id}")
+    public void deleteById(@PathVariable Long id){
+        articleService.deleteById(id);
     }
 
 }
