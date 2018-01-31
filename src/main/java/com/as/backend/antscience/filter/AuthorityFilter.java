@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class AuthorityFilter extends GenericFilterBean implements Filter {
+public class AuthorityFilter extends OncePerRequestFilter {
 
     private static final long serialVersionUID = 1L;
     private static final String AUTH = "/auth/";
@@ -23,7 +24,7 @@ public class AuthorityFilter extends GenericFilterBean implements Filter {
     private TokenService tokenService;
 
     @Override
-    public void doFilter(ServletRequest sRequest, ServletResponse sResponse, FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest sRequest, HttpServletResponse sResponse, FilterChain filterChain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) sRequest;
         ServletContext context = request.getServletContext();
         ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(context);
