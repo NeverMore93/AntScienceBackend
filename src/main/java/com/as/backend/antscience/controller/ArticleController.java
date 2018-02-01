@@ -39,7 +39,7 @@ public class ArticleController {
         return articleDto;
     }
 
-    @GetMapping("/article/id/{id}")
+    @GetMapping("/auth/article/id/{id}")
     public  ArticleDto getById(@PathVariable Long id){
         return articleService.getById(id);
     }
