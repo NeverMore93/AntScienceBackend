@@ -28,7 +28,7 @@ public class ArticleServiceImpl implements ArticleService{
 
 
     @Override
-    public ArticleDto createArticle(ArticleDto articleDto) {
+    public ArticleDto create(ArticleDto articleDto) {
         Article article=  ArticleDto2Article(articleDto);
         article = articleDao.saveAndFlush(article);
         articleDto = Article2ArticleDto(article,articleDto);
@@ -37,18 +37,18 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<ArticleDto> getAllArticles() {
+    public List<ArticleDto> getArticles() {
         List<Article> articles = articleDao.findAll();
         List<ArticleDto> articleDtos = new ArrayList<>();
         for (Article article :  articles) {
-            articleDtos.add(getArticleById(article.getId()));
+            articleDtos.add(getById(article.getId()));
         }
 
         return articleDtos;
     }
 
     @Override
-    public ArticleDto getArticleById(Long articleId) {
+    public ArticleDto getById(Long articleId) {
         Article article = articleDao.findArticleById(articleId);
         File file = new File("/media/Acticles/"+article.getAuthorID()+"/"+articleId+".txt");
 //        File file = new File("C:\\Users\\YUAN\\Documents\\Acticles\\"+article.getAuthorID()+"\\"+articleId+".txt");
@@ -63,7 +63,7 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public void deleteArticleById(Long articleId) {
+    public void deleteById(Long articleId) {
         articleDao.delete(articleId);
     }
 
