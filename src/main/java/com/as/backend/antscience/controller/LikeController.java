@@ -1,7 +1,6 @@
 package com.as.backend.antscience.controller;
 
 import com.as.backend.antscience.dto.LikeDto;
-import com.as.backend.antscience.entity.Like;
 import com.as.backend.antscience.service.LikeService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class LikeController {
 
     @ApiOperation("点赞/取消点赞")
     @PostMapping("/like")
-    public Like create(@RequestBody @Valid LikeDto likeDto){
+    public LikeDto create(@RequestBody @Valid LikeDto likeDto){
         return likeService.create(likeDto);
     }
 }

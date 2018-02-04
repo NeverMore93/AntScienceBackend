@@ -29,4 +29,7 @@ public class Like {
     @Column(name = "createTime")
     private Date createTime;
 
+    @Column(name = "isLike")
+    private boolean isLike;
+
 }
