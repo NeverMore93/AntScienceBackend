@@ -1,5 +1,6 @@
 package com.as.backend.antscience.service;
 
+import com.as.backend.antscience.dao.ArticleDao;
 import com.as.backend.antscience.dao.LikeDao;
 import com.as.backend.antscience.dto.LikeDto;
 import com.as.backend.antscience.entity.Like;
@@ -19,19 +20,26 @@ public class LikeServiceImpl implements LikeService {
     @Resource
     private LikeDao likeDao;
 
+    @Resource
+    private ArticleDao articleDao;
+
+    @Resource
+    private ArticleService articleService;
+
     @Override
     public LikeDto create(LikeDto likeDto) {
         Long articleId = likeDto.getArticleId();
         Long userId = likeDto.getUserId();
         Like like = likeDao.findByUserIdAndArticleId(userId, articleId);
-        if (Objects.isNull(like)){
+        if (Objects.isNull(like)) {
             return createLike(userId, articleId);
         }
-        return updateLike(userId, articleId,like.isLike());
+        return updateLike(userId, articleId, like.isLike());
     }
 
-    private LikeDto updateLike(Long userId, Long articleId,boolean isLike) {
+    private LikeDto updateLike(Long userId, Long articleId, boolean isLike) {
         likeDao.update(userId, articleId, !isLike);
+        articleService.updateLikes(articleId, isLike);
         Like like = likeDao.findByUserIdAndArticleId(userId, articleId);
         return like2LikeDto(like);
     }
@@ -41,6 +49,7 @@ public class LikeServiceImpl implements LikeService {
         like.setUserId(userId);
         like.setArticleId(articleId);
         like = likeDao.saveAndFlush(like);
+        articleDao.updateLikes(articleId, 1);
         return like2LikeDto(like);
     }
 
