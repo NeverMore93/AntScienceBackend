@@ -26,3 +26,4 @@ out/
 .nb-gradle/
 *.class
 out/production/resources/application.yaml
+src/main/webapp/

@@ -9,4 +9,5 @@ public interface ArticleService {
     List<ArticleDto> getArticles();
     ArticleDto getById(Long articleId);
     void deleteById(Long articleId);
+    void updateLikes(Long articleId, boolean isLike);
 }
