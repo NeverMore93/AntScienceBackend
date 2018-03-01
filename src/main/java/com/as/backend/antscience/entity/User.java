@@ -1,11 +1,13 @@
 package com.as.backend.antscience.entity;
 
 import com.as.backend.antscience.enums.Gender;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
-import javax.persistence.Entity;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 
@@ -22,18 +24,15 @@ public class User {
     @Column(name = "id",unique=true)
     private Long id;
 
-    @NotBlank
     @Column(name = "password")
     private String password;
 
-    @NotBlank
     @Column(name = "username")
     private String username;
 
     @Email
     @Column(name = "email")
     private String email;
-
 
     @Column(name = "phone")
     @Pattern(regexp = "^1\\d{10}$")

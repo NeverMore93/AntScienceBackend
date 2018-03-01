@@ -30,11 +30,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public User findUserByIdentity(String identity) {
-        User user = userDao.findUsersByUsernameOrEmailOrPhone(identity, identity, identity);
+        User user = userDao.findIdentity(identity);
         if (!Objects.nonNull(user)) {
             throw new UserNotFoundException("用户不存在");
         }
-        return userDao.findUsersByUsernameOrEmailOrPhone(identity, identity, identity);
+        return userDao.findIdentity(identity);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         String email = registerUserDto.getEmail();
         String username = registerUserDto.getUsername();
         String password = registerUserDto.getPassword();
-        User foundUser = userDao.findUsersByUsernameOrEmailOrPhone(username, email, phone);
+        User foundUser = userDao.findIdentity(username);
         if (Objects.nonNull(foundUser)){
             throw new UserExistedException("用户名、手机号或邮箱已被使用或注册");
         }
@@ -80,6 +80,6 @@ public class UserServiceImpl implements UserService {
 
     private UserDto User2UserDto(User user) {
         String token = tokenService.buildToken(user.getUsername());
-        return new UserDto(user.getId(), user.getUsername(), user.getPhone(), user.getEmail(), user.getGender(), token);
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getGender(), token);
     }
 }

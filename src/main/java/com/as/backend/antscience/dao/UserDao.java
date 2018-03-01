@@ -19,10 +19,10 @@ public interface UserDao extends JpaRepository<User, Long> {
     @Query(value = "SELECT username FROM users WHERE id = ?1", nativeQuery = true)
     String getUsernameByUserId(Long id);
 
-    User findUsersByUsernameOrEmailOrPhone(String username, String email, String phone);
+    @Query(value = "SELECT * FROM users WHERE phone = ?1 OR email = ?1 OR username = ?1", nativeQuery = true)
+    User findIdentity(String identity);
 
+    @Query(value = "SELECT * FROM users WHERE phone = ?1", nativeQuery = true)
     User findUserByPhone(String phone);
-
-
 
 }

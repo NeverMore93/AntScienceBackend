@@ -43,14 +43,14 @@ public class SMSHttpRequest {
     @Resource(name = "userService")
     private UserService userService;
 
-    public SMSdto execute(String to) {
+    public SMSdto execute(String phone) {
         SMSdto smSdto = new SMSdto();
         String code = RandomCode.generateCode(4);
-        redisTemplate.opsForValue().set(to, code, VERIFICATION_CODE_EXPIRATION_TIME, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(phone, code, VERIFICATION_CODE_EXPIRATION_TIME, TimeUnit.MINUTES);
         AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
         List<Param> params = new ArrayList<>();
         params.add(new Param("appid", appid));
-        params.add(new Param("to", to));
+        params.add(new Param("to", phone));
         params.add(new Param("project", project));
         params.add(new Param("signature", signature));
         params.add(new Param("vars", "{\"code\":\"" + code + "\"}"));
@@ -58,14 +58,14 @@ public class SMSHttpRequest {
         ListenableFuture<String> response = asyncHttpClient.executeRequest(request, new AsyncCompletionHandler<String>() {
             @Override
             public String onCompleted(Response response) {
-                log.info(to + "短信发送成功");
+                log.info(phone + "短信发送成功");
                 return response.getResponseBody();
             }
 
             @Override
             public void onThrowable(Throwable t) {
-                log.info(to + "短信发送失败", t);
-                throw new SMSException(to + "短信发送失败", t);
+                log.info(phone + "短信发送失败", t);
+                throw new SMSException(phone + "短信发送失败", t);
             }
         });
         String result = null;
@@ -74,24 +74,25 @@ public class SMSHttpRequest {
             result = response.get();
             smSdto = mapper.readValue(result, SMSdto.class);
         } catch (InterruptedException | ExecutionException | IOException e) {
-            log.info(to + "短信发送失败" + e.getMessage());
+            log.info(phone + "短信发送失败" + e.getMessage());
             e.printStackTrace();
         }
         return smSdto;
     }
 
-    public UserDto validateVerificationCode(String to, String code) {
-        String cachedCode = (String) redisTemplate.opsForValue().get(to);
+    public UserDto validateVerificationCode(String phone, String code) {
+        String cachedCode = (String) redisTemplate.opsForValue().get(phone);
         if (!code.equals(cachedCode)) {
             throw new VerificationCodeException("验证码错误");
         }
-        User user = userDao.findUserByPhone(to);
+        User user = userDao.findUserByPhone(phone);
         if(Objects.isNull(user)){
             RegisterUserDto registerUserDto = new RegisterUserDto();
-            registerUserDto.setPhone(to);
-            registerUserDto.setUsername(to);
+            registerUserDto.setPhone(phone);
+            registerUserDto.setUsername(phone);
             userService.register(registerUserDto);
         }
-        return null;
+        user = userDao.findUserByPhone(phone);
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getGender(), null);
     }
 }
