@@ -24,8 +24,13 @@ public class TokenServiceImpl implements TokenService {
 
     @ApiOperation("判断Token是否过期")
     public Boolean isExpired(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SIGNING_KEY).parseClaimsJws(token).getBody();
-        Date expirationTime = claims.getExpiration();
+        Date expirationTime;
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SIGNING_KEY).parseClaimsJws(token).getBody();
+            expirationTime = claims.getExpiration();
+        } catch (Exception e) {
+            throw new TokenInvalidException("认证已经过期,请重新认证获取token。");
+        }
         return expirationTime.before(new Date());
     }
 

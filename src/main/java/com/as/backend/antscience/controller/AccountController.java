@@ -4,7 +4,6 @@ import com.as.backend.antscience.dto.LoginUser;
 import com.as.backend.antscience.dto.RegisterUserDto;
 import com.as.backend.antscience.dto.SMSdto;
 import com.as.backend.antscience.dto.UserDto;
-import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.service.UserService;
 import com.as.backend.antscience.utils.SMSHttpRequest;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +36,8 @@ public class AccountController {
         return smsHttpRequest.execute(phone);
     }
 
-    @GetMapping("/auth/verification/phone/{to}/code/{code}")
-    public UserDto validateVerificationCode(@PathVariable("to") String to, @PathVariable("code") String code) {
-        return smsHttpRequest.validateVerificationCode(to, code);
+    @GetMapping("/auth/verification/phone/{phone}/code/{code}")
+    public UserDto validateVerificationCode(@PathVariable("phone") String phone, @PathVariable("code") String code) {
+        return smsHttpRequest.validateVerificationCode(phone, code);
     }
 }
