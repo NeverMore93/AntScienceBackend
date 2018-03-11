@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 
@@ -18,5 +19,6 @@ public class RegisterUserDto {
     @Pattern(regexp = "^1\\d{10}$")
     private String phone;
     private Gender gender;
+    @NotBlank
     private String password;
 }

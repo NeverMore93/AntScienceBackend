@@ -15,7 +15,7 @@ import javax.validation.Valid;
  * Created by lirui on 2018/2/2.
  */
 @RestController
-@CrossOrigin(origins = {"*"}, maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:8102","*"}, maxAge = 3600)
 
 public class LikeController {
 
