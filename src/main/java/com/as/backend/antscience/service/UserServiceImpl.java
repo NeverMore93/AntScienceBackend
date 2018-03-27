@@ -68,8 +68,13 @@ public class UserServiceImpl implements UserService {
         return User2UserDto(user);
     }
 
-
     @Override
+    public UserDto resetUserProperties(UserDto userDto) {
+        User user = userDao.resetUserProperties(userDto.getId(),userDto.getUsername(),userDto.getEmail(),userDto.getPhone(),userDto.getGender());
+        return new UserDto(user.getId(),user.getUsername(),user.getEmail(),user.getPhone(),user.getGender(),null);
+    }
+
+
     public User findUserByUsername(String username) {
         return userDao.findUserByUsername(username);
     }
@@ -82,4 +87,6 @@ public class UserServiceImpl implements UserService {
         String token = tokenService.buildToken(user.getUsername());
         return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getGender(), token);
     }
+
+
 }

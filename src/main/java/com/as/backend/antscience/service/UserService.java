@@ -12,4 +12,5 @@ public interface UserService {
     User findUserByIdentity(String identity);
     UserDto login(LoginUser loginUser);
     UserDto register(RegisterUserDto registerUserDto);
+    UserDto resetUserProperties(UserDto userDto);
 }

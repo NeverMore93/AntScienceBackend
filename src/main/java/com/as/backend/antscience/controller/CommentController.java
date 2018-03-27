@@ -2,7 +2,6 @@ package com.as.backend.antscience.controller;
 
 import com.as.backend.antscience.entity.Comment;
 import com.as.backend.antscience.service.CommentService;
-import com.as.backend.antscience.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
