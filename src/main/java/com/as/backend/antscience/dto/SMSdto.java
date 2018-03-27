@@ -7,7 +7,8 @@ public class SMSdto {
     private String status;
     private String send_id;
     private Integer fee;
-    private Integer sms_credits;
+    private String sms_credits;
     private String code;
     private String msg;
+    private String transactional_sms_credits;
 }

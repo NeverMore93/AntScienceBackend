@@ -7,6 +7,7 @@ import com.as.backend.antscience.dto.UserDto;
 import com.as.backend.antscience.entity.User;
 import com.as.backend.antscience.exceptions.SMSException;
 import com.as.backend.antscience.exceptions.VerificationCodeException;
+import com.as.backend.antscience.service.TokenService;
 import com.as.backend.antscience.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -43,10 +44,13 @@ public class SMSHttpRequest {
     @Resource(name = "userService")
     private UserService userService;
 
+    @Resource(name = "tokenService")
+    private TokenService tokenService;
+
     public SMSdto execute(String phone) {
         SMSdto smSdto = new SMSdto();
         String code = RandomCode.generateCode(4);
-        redisTemplate.opsForValue().set(phone, code, VERIFICATION_CODE_EXPIRATION_TIME, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(phone, code, VERIFICATION_CODE_EXPIRATION_TIME, TimeUnit.HOURS);
         AsyncHttpClient asyncHttpClient = new DefaultAsyncHttpClient();
         List<Param> params = new ArrayList<>();
         params.add(new Param("appid", appid));
@@ -93,6 +97,6 @@ public class SMSHttpRequest {
             userService.register(registerUserDto);
         }
         user = userDao.findUserByPhone(phone);
-        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getGender(), null);
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getGender(), tokenService.buildToken(user.getUsername()));
     }
 }

@@ -27,10 +27,10 @@ public class Article {
     private Long authorID;
 
     @Column(name = "label")
-    private String[] label;
+    private String label;
 
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
     @Column(name = "creationTime")
     private Date createTime;

@@ -38,7 +38,7 @@ public class AuthorityFilter extends OncePerRequestFilter {
             log.info("开始拦截验证， 处理Token");
             token = tokenService.identify(token, userName);
             response.setHeader("token", token);
-            return;
+//            return;
         }
         filterChain.doFilter(request, response);
     }

@@ -14,7 +14,7 @@ public class ArticleDto {
     private Long id;
     private String title;
     private String authorName;
-    private String[] label;
+    private String label;
     private List<String> content;
     private Date createTime;
 }
