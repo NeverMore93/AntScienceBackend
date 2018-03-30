@@ -7,6 +7,7 @@ import java.util.List;
 public interface ArticleService {
     ArticleDto create(ArticleDto articleDto);
     List<ArticleDto> getArticles();
+    List<ArticleDto> getArticlesByAuthorID(Long authorID);
     ArticleDto getById(Long articleId);
     void deleteById(Long articleId);
     void updateLikes(Long articleId, boolean isLike);

@@ -24,4 +24,6 @@ public interface ArticleDao extends JpaRepository<Article, Long> {
     @Modifying
     @Query("UPDATE articles SET likes = likes + ?2 WHERE article_id = ?1 ")
     void updateLikes(Long articleId, int i);
+
+    List<Article> findArticlesByAuthorID(Long authorID);
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Slf4j
 @Service("commentService")
-public class CommentServiceImpl implements CommentService {
+public class   CommentServiceImpl implements CommentService {
 
     @Resource
     private CommentDao commentDao;

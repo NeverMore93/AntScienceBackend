@@ -48,6 +48,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ArticleDto> getArticlesByAuthorID(Long authorID) {
+        List<Article> articles = articleDao.findArticlesByAuthorID(authorID);
+        List<ArticleDto> articleDtos = new ArrayList<>();
+        for (Article article : articles) {
+            articleDtos.add(getById(article.getId()));
+        }
+
+        return articleDtos;
+    }
+
+    @Override
     public ArticleDto getById(Long articleId) {
         Article article = articleDao.findArticleById(articleId);
         //File file = new File("/media/Acticles/" + article.getAuthorID() + "/" + articleId + ".txt");

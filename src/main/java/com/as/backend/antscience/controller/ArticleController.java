@@ -16,27 +16,13 @@ public class ArticleController {
     private ArticleService articleService;
 
     @GetMapping("/auth/articles")
-    public List<ArticleDto> getArticles(){
+    public List<ArticleDto> articles(){
         return articleService.getArticles();
     }
 
     @PostMapping("/article")
     public ArticleDto create(@RequestBody @Valid ArticleDto articleDto){
         return articleService.create(articleDto);
-    }
-
-    @PostMapping("/demoArticle")
-    public ArticleDto demoArticle(){
-        String[] label = {"demo"};
-        List<String> content = new ArrayList<>();
-        content.add("demo1");
-        content.add("demo2");
-        ArticleDto articleDto = new ArticleDto();
-        articleDto.setAuthorName("yuan");
-        articleDto.setLabel(label);
-        articleDto.setTitle("Test");
-        articleDto.setContent(content);
-        return articleDto;
     }
 
     @GetMapping("/auth/article/id/{id}")
@@ -47,6 +33,11 @@ public class ArticleController {
     @DeleteMapping("/article/id/{id}")
     public void deleteById(@PathVariable Long id){
         articleService.deleteById(id);
+    }
+
+    @PostMapping("/articles/{authorID}")
+    public List<ArticleDto>  AuthorArticles(@PathVariable Long authorID){
+        return articleService.getArticlesByAuthorID(authorID);
     }
 
 }
